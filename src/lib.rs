@@ -1,4 +1,5 @@
 #![cfg_attr(feature = "nightly", feature(f16, f128))]
+#![cfg_attr(any(docsrs, feature = "nightly"), feature(doc_cfg))]
 #![no_std]
 
 //! A simple crate to limit values using range syntax.

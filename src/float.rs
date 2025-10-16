@@ -47,27 +47,27 @@ pub trait LimitFloatBounds<T>: Sealed + Sized {
 
 impl Sealed for RangeFull {}
 macro_rules! limit_float {
-	($t:ty) => {
-		impl LimitFloat for $t {}
+	($(#[$m:meta])* $t:ty) => {
+		$(#[$m])* impl LimitFloat for $t {}
 
-		impl Sealed for RangeFrom<$t> {}
-		impl LimitFloatBounds<$t> for RangeFrom<$t> {
+		$(#[$m])* impl Sealed for RangeFrom<$t> {}
+		$(#[$m])* impl LimitFloatBounds<$t> for RangeFrom<$t> {
 			#[doc(hidden)]
 			fn limit_bounds(self, value: $t) -> $t {
 				value.clamp(self.start, <$t>::INFINITY)
 			}
 		}
 
-		impl Sealed for RangeToInclusive<$t> {}
-		impl LimitFloatBounds<$t> for RangeToInclusive<$t> {
+		$(#[$m])* impl Sealed for RangeToInclusive<$t> {}
+		$(#[$m])* impl LimitFloatBounds<$t> for RangeToInclusive<$t> {
 			#[doc(hidden)]
 			fn limit_bounds(self, value: $t) -> $t {
 				value.clamp(<$t>::NEG_INFINITY, self.end)
 			}
 		}
 
-		impl Sealed for RangeInclusive<$t> {}
-		impl LimitFloatBounds<$t> for RangeInclusive<$t> {
+		$(#[$m])* impl Sealed for RangeInclusive<$t> {}
+		$(#[$m])* impl LimitFloatBounds<$t> for RangeInclusive<$t> {
 			#[doc(hidden)]
 			fn limit_bounds(self, value: $t) -> $t {
 				let (start, end) = self.into_inner();
@@ -75,7 +75,7 @@ macro_rules! limit_float {
 			}
 		}
 
-		impl LimitFloatBounds<$t> for RangeFull {
+		$(#[$m])* impl LimitFloatBounds<$t> for RangeFull {
 			#[doc(hidden)]
 			fn limit_bounds(self, value: $t) -> $t {
 				value
@@ -86,8 +86,5 @@ macro_rules! limit_float {
 
 limit_float!(f32);
 limit_float!(f64);
-#[cfg(feature = "nightly")]
-limit_float!(f16);
-#[cfg(feature = "nightly")]
-limit_float!(f128);
-
+limit_float!(#[cfg(feature = "nightly")] #[doc(cfg(feature = "nightly"))] f16);
+limit_float!(#[cfg(feature = "nightly")] #[doc(cfg(feature = "nightly"))] f128);
