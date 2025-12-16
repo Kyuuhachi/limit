@@ -2,6 +2,8 @@
 name = "limit"
 version = "0.1.0"
 edition = "2024"
+description = "A simple extension trait that allows clamping of values using range syntax."
+license = "MIT OR Apache-2.0"
 
 [dependencies]
 
